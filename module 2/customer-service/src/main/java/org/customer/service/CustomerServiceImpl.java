@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.customer.dto.CustomerData;
 import org.customer.dto.CustomerRequest;
 import org.customer.dto.CustomerResponse;
 import org.customer.dto.DiscountRequest;
 import org.customer.dto.DiscountResponse;
-import org.customer.dto.SearchCustomerResponse;
 import org.customer.entity.Customer;
 import org.customer.repo.CustomerRepository;
 import org.dnyanyog.enums.CustomerResponseCode;
@@ -26,8 +26,6 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	CustomerResponse customerResponse;
 
-	@Autowired
-	SearchCustomerResponse searchCustomerResponse;
 
 	@Override
 	public CustomerResponse addCustomerDetails(CustomerRequest customerRequest) {
@@ -63,62 +61,81 @@ public class CustomerServiceImpl implements CustomerService {
 		return customerResponse;
 	}
 
-	public CustomerResponse updateCustomerDetails(long id, CustomerRequest customerRequest) {
+	public CustomerResponse updateCustomerDetails(String mobilePhone, CustomerRequest customerRequest) {
 
-		Optional<Customer> customerTable = customerRepo.findById(id);
+		List<Customer> customerTable = customerRepo.findByMobilePhone(mobilePhone);
 		if (customerTable.isEmpty()) {
 			customerResponse.setStatus(CustomerResponseCode.FAILED_UPDATE_CUSTOMER.getStatus());
 			customerResponse.setMessage(CustomerResponseCode.FAILED_UPDATE_CUSTOMER.getMessage());
 			customerResponse.setCustomerCode(0000);
 		} else {
-			Customer customer = Customer.getInstance().setFirst_name(customerRequest.getFirstName())
-					.setMiddle_name(customerRequest.getMiddleName()).setLast_name(customerRequest.getLastName())
-					.setDate_of_birth(customerRequest.getDateOfBirth())
-					.setAddress_line1(customerRequest.getAddressLine1())
-					.setAddress_line2(customerRequest.getAddressLine2()).setZip(customerRequest.getZip())
-					.setCity(customerRequest.getCity()).setState(customerRequest.getState())
-					.setCountry(customerRequest.getCountry()).setMobile_phone(customerRequest.getMobilePhone())
-					.setHome_phone(customerRequest.getHomePhone()).setWork_phone(customerRequest.getWorkPhone())
-					.setEmail_id(customerRequest.getEmailID()).setCustomer_id(customerRequest.getCustomerId())
-					.setCreated_date(LocalDateTime.now()).setUpdated_date(LocalDateTime.now());
-
+			Customer receivedData = customerTable.get(0);
+			
+			receivedData.setFirst_name(customerRequest.getFirstName());
+			receivedData.setMiddle_name(customerRequest.getMiddleName());
+			receivedData.setLast_name(customerRequest.getLastName());
+			receivedData.setDate_of_birth(customerRequest.getDateOfBirth());
+			receivedData.setAddress_line1(customerRequest.getAddressLine1());
+			receivedData.setAddress_line2(customerRequest.getAddressLine2());
+			receivedData.setZip(customerRequest.getZip());
+			receivedData.setCity(customerRequest.getCity());
+			receivedData.setState(customerRequest.getState());
+			receivedData.setCountry(customerRequest.getCountry());
+			receivedData.setMobile_phone(customerRequest.getMobilePhone());
+			receivedData.setHome_phone(customerRequest.getHomePhone());
+			receivedData.setWork_phone(customerRequest.getWorkPhone());
+			receivedData.setEmail_id(customerRequest.getEmailID());
+			receivedData.setCustomer_id(customerRequest.getCustomerId());
+			receivedData.setCreated_date(LocalDateTime.now());
+			receivedData.setUpdated_date(LocalDateTime.now());
+			
+			receivedData = customerRepo.save(receivedData);
+			
+			customerResponse.setStatus("Success");
+			customerResponse.setMessage("Data Updated Successfuly");
+			
+			
 		}
 
 		return customerResponse;
 
 	}
 
-	public CustomerResponse findByMobileNumber(String mobile_number) {
+	public CustomerResponse findByMobileNumber(String mobilePhone) {
+	    CustomerResponse customerResponse = new CustomerResponse(); // Initialize customerResponse
 
-		List<Customer> customerTable = customerRepo.findByMobile(mobile_number);
-		if (customerTable.isEmpty()) {
-			customerResponse.setStatus(CustomerResponseCode.FAILED_GET_CUSTOMER.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.FAILED_GET_CUSTOMER.getMessage());
-			customerResponse.setCustomerCode(0000);
-		} else {
-			Customer receivedData = customerTable.get(0);
+	    List<Customer> customerTable = customerRepo.findByMobilePhone(mobilePhone);
 
-			searchCustomerResponse.setStatus("Success");
-			searchCustomerResponse.setMessage("Customer ddetails are as follows :");
-			searchCustomerResponse.setCustomerCode(receivedData.getCustomer_code());
-			searchCustomerResponse.getCustomerData().setFirstName(receivedData.getFirst_name());
-			searchCustomerResponse.getCustomerData().setMiddleName(receivedData.getMiddle_name());
-			searchCustomerResponse.getCustomerData().setMiddleName(receivedData.getLast_name());
-			searchCustomerResponse.getCustomerData().setDateOfBirth(receivedData.getDate_of_birth());
-			searchCustomerResponse.getCustomerData().setAddressLine1(receivedData.getAddress_line1());
-			searchCustomerResponse.getCustomerData().setAddressLine2(receivedData.getAddress_line2());
-			searchCustomerResponse.getCustomerData().setZip(receivedData.getZip());
-			searchCustomerResponse.getCustomerData().setCity(receivedData.getCity());
-			searchCustomerResponse.getCustomerData().setState(receivedData.getState());
-			searchCustomerResponse.getCustomerData().setCountry(receivedData.getCountry());
-			searchCustomerResponse.getCustomerData().setMobilePhone(receivedData.getMobile_phone());
-			searchCustomerResponse.getCustomerData().setHomePhone(receivedData.getHome_phone());
-			searchCustomerResponse.getCustomerData().setWorkPhone(receivedData.getWork_phone());
-			searchCustomerResponse.getCustomerData().setEmailID(receivedData.getEmail_id());
+	    if (customerTable.isEmpty()) {
+	        customerResponse.setStatus(CustomerResponseCode.FAILED_GET_CUSTOMER.getStatus());
+	        customerResponse.setMessage(CustomerResponseCode.FAILED_GET_CUSTOMER.getMessage());
+	        customerResponse.setCustomerCode(0000); // Assuming customerCode is a long, it should be set as 0L for clarity.
+	    } else {
+	        Customer receivedData = customerTable.get(0);
 
-		}
+	        customerResponse.setCustomerCode(receivedData.getCustomer_code());
+	        CustomerData customerData = new CustomerData();
+	        customerData.setFirstName(receivedData.getFirst_name());
+	        customerData.setMiddleName(receivedData.getMiddle_name());
+	        customerData.setLastName(receivedData.getLast_name());
+	        customerData.setDateOfBirth(receivedData.getDate_of_birth());
+	        customerData.setAddressLine1(receivedData.getAddress_line1());
+	        customerData.setAddressLine2(receivedData.getAddress_line2());
+	        customerData.setZip(receivedData.getZip());
+	        customerData.setCity(receivedData.getCity());
+	        customerData.setState(receivedData.getState());
+	        customerData.setCountry(receivedData.getCountry());
+	        customerData.setMobilePhone(receivedData.getMobile_phone());
+	        customerData.setHomePhone(receivedData.getHome_phone());
+	        customerData.setWorkPhone(receivedData.getWork_phone());
+	        customerData.setEmailID(receivedData.getEmail_id());
+	        customerResponse.setCustomerData(customerData);
+	        
+	        customerResponse.setMessage("Customer details found");
+	        customerResponse.setStatus("Success");
+	    }
 
-		return customerResponse;
+	    return customerResponse;
 	}
 
 	public DiscountResponse getDiscount(DiscountRequest request) {

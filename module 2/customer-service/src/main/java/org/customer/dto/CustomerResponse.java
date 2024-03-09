@@ -1,5 +1,6 @@
 package org.customer.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,7 +10,15 @@ public class CustomerResponse {
 	private String message;
 	private long customerCode;
 	
+	@Autowired
+	private CustomerData customerData;
 	
+	public CustomerData getCustomerData() {
+		return customerData;
+	}
+	public void setCustomerData(CustomerData customerData) {
+		this.customerData = customerData;
+	}
 	public String getStatus() {
 		return status;
 	}

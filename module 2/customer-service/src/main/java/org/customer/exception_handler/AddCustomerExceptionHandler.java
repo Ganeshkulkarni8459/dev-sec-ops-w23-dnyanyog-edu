@@ -22,7 +22,6 @@ public class AddCustomerExceptionHandler {
 			String fieldName = ((FieldError)error).getField();
 			String errorMessage = ((DefaultMessageSourceResolvable) error).getDefaultMessage();
 			errors.put(fieldName, errorMessage);
-			
 		});
 		return errors;
 	}

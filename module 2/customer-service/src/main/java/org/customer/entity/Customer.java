@@ -64,8 +64,8 @@ public class Customer {
 	@Column(updatable = true, nullable = false)
 	private long customer_id;
 
-	@Column(name = "mobile")
-	private String mobile;
+	@Column(name = "mobilePhone")
+	private String mobilePhone;
 
 	@Column
 	private String home_phone;
@@ -187,11 +187,11 @@ public class Customer {
 	}
 
 	public String getMobile_phone() {
-		return mobile;
+		return mobilePhone;
 	}
 
 	public Customer setMobile_phone(String mobile_phone) {
-		this.mobile = mobile_phone;
+		this.mobilePhone = mobile_phone;
 
 		return this;
 	}

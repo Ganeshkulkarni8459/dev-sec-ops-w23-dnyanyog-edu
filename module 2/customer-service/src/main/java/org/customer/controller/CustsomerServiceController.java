@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -26,15 +27,15 @@ public class CustsomerServiceController {
 		return CustomerServiceImpl.addCustomerDetails(request);
 	}
 
-	@PostMapping(path = "/api/v1/customer/update/{id}", consumes = { "application/json",
+	@PostMapping(path = "/api/v1/customer/update/{mobilePhone}", consumes = { "application/json",
 			"application/xml" }, produces = { "application/json", "application/xml" })
-	public CustomerResponse update(@PathVariable long id, @RequestBody CustomerRequest request) {
-		return CustomerServiceImpl.updateCustomerDetails(id, request);
+	public CustomerResponse update(@PathVariable String mobilePhone, @RequestBody CustomerRequest request) {
+		return CustomerServiceImpl.updateCustomerDetails(mobilePhone, request);
 	}
 
-	@GetMapping(path = "/api/v1/customer/search/{mobile_number}")
-	public CustomerResponse searchCustomerByMobileNumber(String mobile_number) {
-		return CustomerServiceImpl.findByMobileNumber(mobile_number);
+	@GetMapping(path = "/api/v1/customer/search/{mobilePhone}")
+	public CustomerResponse searchCustomerByMobileNumber(@PathVariable String mobilePhone) {
+	    return CustomerServiceImpl.findByMobileNumber(mobilePhone);
 	}
 	
 	@PostMapping(path = "/api/v1/customer/discount", 

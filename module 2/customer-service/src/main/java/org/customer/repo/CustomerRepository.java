@@ -1,6 +1,7 @@
 package org.customer.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.customer.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
 	//List<Customer> findByEmail_Id(@Param("email_id") String email_id);
 	
-	List<Customer> findByMobile(String mobile);
-
+	List<Customer> findByMobilePhone(String mobilePhone);
+	
 }
