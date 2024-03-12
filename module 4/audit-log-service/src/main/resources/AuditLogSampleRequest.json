@@ -1,0 +1,27 @@
+GET: http://localhost:8085/api/v1/audit
+
+Post: http://localhost:8085/api/v1/audit/log
+{
+  "id": "123123",
+  "timestamp": "2024-03-07T12:00:00",
+  "requestId": "VZ_CLIENT",
+  "clientIp": "192.168.1.1",
+  "userAgent": "Mozilla/5.0",
+  "httpMethod": "GET",
+  "requestUrl": "http://example.com/api/resource",
+  "requestHeaders": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer token"
+  },
+  "requestBody": "{\"key\": \"value\"}",
+  "statusCode": 200,
+  "responseHeaders": {
+    "Content-Type": "application/json"
+  },
+  "responseBody": "{\"result\": \"success\"}",
+  "microservice": "example_microservice",
+  "endpoint": "/api/resource",
+  "errorMessage": "Example error message",
+  "stackTrace": "at com.example.ExampleClass.method(ExampleClass.java:10)"
+}
+
